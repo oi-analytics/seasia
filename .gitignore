@@ -134,3 +134,5 @@ incoming_data
 results
 figures
 
+# QGIS projects
+*.qgz
