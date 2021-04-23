@@ -15,7 +15,7 @@ namespace oia_risk_model{
         X.push_back(0); Y.push_back(0);
 
         // ...followed by all the points that have been specified...
-        for(int i=rp.size()-1; i>=0; i--){
+        for(std::size_t i=rp.size()-1; i>=0; i--){
           X.push_back(1.0/double(rp.at(i)));
           Y.push_back(pFail.at(i));
         }
@@ -33,7 +33,7 @@ namespace oia_risk_model{
       double area(){
         double a = 0;
         // Simple integration by parts...
-        for(int i=0; i<X.size()-1; i++){
+        for(std::size_t i=0; i<X.size()-1; i++){
           // Calculate the base-length between adjacent values...
           double base = X.at(i+1) - X.at(i);
           // Calculate the height of the segment...

@@ -19,7 +19,7 @@ namespace oia_risk_model{
       // Calculate the emissions as per the TRI paper on emissions with speed...
       double emissions(const double speed_km) const {
         double g_km = coeffs.at(0);
-        for(int i=1; i<coeffs.size(); i++){
+        for(std::size_t i=1; i<coeffs.size(); i++){
           g_km += coeffs.at(i)*std::pow(speed_km,i);
         }
         return factor * g_km / speed_km;
@@ -126,7 +126,7 @@ namespace oia_risk_model{
           // If the line is the correct length, parse it out...
           if(words.size() == 9){
             std::vector<double> c;
-            for(int i=2; i<words.size(); i++){
+            for(std::size_t i=2; i<words.size(); i++){
               c.push_back(std::stod(words.at(i)));
             }
             // Insert the vehicle object into the std::map...

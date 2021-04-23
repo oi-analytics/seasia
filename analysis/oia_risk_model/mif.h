@@ -251,7 +251,7 @@ namespace oia_risk_model{
 
     // Helper function to drop a column from the MIF file before writing...
     void removeAttribute(const std::string col){
-      for(int i=0; i<columns.size(); i++){
+      for(std::size_t i=0; i<columns.size(); i++){
         if(columns.at(i) == col){
             dropColumn.at(i) = true;
         }
@@ -259,7 +259,7 @@ namespace oia_risk_model{
     }
 
     void removeAllAtributesExcept(const std::vector<std::string> cols){
-      for(int i=0; i<columns.size(); i++){
+      for(std::size_t i=0; i<columns.size(); i++){
         dropColumn.at(i) = true;
         for(auto c : cols){
           if(columns.at(i).find(c) != std::string::npos){
@@ -320,7 +320,7 @@ namespace oia_risk_model{
         // And a flag to indicate that a feature has been divided...  
         bool divided = false;
         // Loop over each point in the original feature geometry...
-        for(int i=0; i<f.geometry.size()-1; i++){
+        for(std::size_t i=0; i<f.geometry.size()-1; i++){
           // ...and construct a line to the next point.
           geometry::Line2<double> line(f.geometry.at(i), f.geometry.at(i+1));
 
@@ -333,7 +333,7 @@ namespace oia_risk_model{
             clean.geometry.push_back(line.start);
 
             // Loop over each intersection, and add a new feature for each...
-            for( int j=1; j<intersections.size(); j++){
+            for(std::size_t j=1; j<intersections.size(); j++){
               // Add the crossing point to the cleaned features geometry...
               clean.geometry.push_back(intersections.at(j));
 
@@ -412,7 +412,7 @@ namespace oia_risk_model{
         divided.attributes = f.attributes;
 
         // Loop over each point in the original feature geometry...
-        for(int i=0; i<f.geometry.size()-1; i++){
+        for(std::size_t i=0; i<f.geometry.size()-1; i++){
           // ...and construct a line to the next point.
           geometry::Line2<double> line(f.geometry.at(i), f.geometry.at(i+1));
 
@@ -425,7 +425,7 @@ namespace oia_risk_model{
             divided.geometry.push_back(line.start);
 
             // Loop over each intersection, and add a new feature for each...
-            for( int j=1; j<intersections.size(); j++){
+            for(std::size_t j=1; j<intersections.size(); j++){
               // Add the crossing point to the cleaned features geometry...
               divided.geometry.push_back(intersections.at(j));
             }
@@ -488,7 +488,7 @@ namespace oia_risk_model{
       }
 
       // Loop over each feature...
-      int iF=0;
+      std::size_t iF=0;
       while(iF < features.size()){
         // Is this a feature that is being dropped?
         if(dropFeature.at(iF))
@@ -504,7 +504,7 @@ namespace oia_risk_model{
           merged_attributes = features.at(iF).attributes;
         }
 
-        int iFF = iF + 1;
+        std::size_t iFF = iF + 1;
         double numMerged = 1;
         while(iFF < features.size() && dropFeature.at(iFF)){
           std::vector<std::string> next_attributes;
@@ -516,7 +516,7 @@ namespace oia_risk_model{
             next_attributes = features.at(iFF).attributes;
           }
 
-          for(int iA=0; iA<merged_attributes.size(); iA++){      
+          for(std::size_t iA=0; iA<merged_attributes.size(); iA++){
             // For floats, we want to operate on the attribute data...
             if(columns.at(iA).find("Float") != std::string::npos){
               // Does this column contain a probability?
@@ -557,7 +557,7 @@ namespace oia_risk_model{
         }
 
         // FINALLY write the data to disk...
-        for(int iA=0; iA<merged_attributes.size()-1; iA++){
+        for(std::size_t iA=0; iA<merged_attributes.size()-1; iA++){
           if(!dropColumn.at(iA)){
             auto a = merged_attributes.at(iA);
             outFile  << a << ",";
@@ -601,7 +601,7 @@ namespace oia_risk_model{
       outFile << "\n";
 
       // Loop over each of the features...
-      int iF = 0;
+      std::size_t iF = 0;
       while(iF < features.size()){
         // Grab the feature...
         auto f = features.at(iF);
@@ -617,7 +617,7 @@ namespace oia_risk_model{
           int numPoints = f.geometry.size();
 
           // Get the index of the next feature...
-          int iFF = iF + 1;
+          std::size_t iFF = iF + 1;
           while(iFF < features.size() && dropFeature.at(iFF)){
             numPoints += features.at(iFF).geometry.size() - (features.at(iFF-1).geometry.at(features.at(iFF-1).geometry.size()-1) == features.at(iFF).geometry.at(0) && dropFeature.at(iFF));
             iFF++;
@@ -631,7 +631,7 @@ namespace oia_risk_model{
           outFile << std::setprecision(13) << f.geometry.at(0).x << " " << f.geometry.at(0).y << "\n";
 
         // Write the rest of the features...
-        for(int iP=1; iP<f.geometry.size(); iP++)
+        for(std::size_t iP=1; iP<f.geometry.size(); iP++)
           outFile << std::setprecision(13) << f.geometry.at(iP).x << " " << f.geometry.at(iP).y << "\n";
 
         // If this is NOT the last feature, we want to test if the next feature is being dropped...
@@ -691,7 +691,7 @@ namespace oia_risk_model{
           midFile  << a << ",";
 
         // Followed by the data just read from disk...
-        for(int i=0; i<data.size()-1; i++)
+        for(std::size_t i=0; i<data.size()-1; i++)
           midFile << data.at(i) << ",";
 
         // Finally, write the last vale to disk, and add a newline...
@@ -751,7 +751,7 @@ namespace oia_risk_model{
         }
 
         // And the non-repeated data from the second mid...
-        for(int i=3; i<words2.size()-1; i++){
+        for(std::size_t i=3; i<words2.size()-1; i++){
           outFile  << words2.at(i) << ",";
         }
 
@@ -796,13 +796,13 @@ namespace oia_risk_model{
       inFile.close();
 
       // Loop over all the features, looking for neighbours that have been split...
-      for(int i=1; i<mif.features.size(); i++)
+      for(std::size_t i=1; i<mif.features.size(); i++)
         if(id.at(i) == id.at(i-1))
           mif.dropFeature.at(i) = true;
 
     }else{
-      // We have the data in memory, so can find the features that have been divided simply... 
-      for(int i=1; i<mif.features.size(); i++)
+      // We have the data in memory, so can find the features that have been divided simply...
+      for(std::size_t i=1; i<mif.features.size(); i++)
         if(mif.features.at(i).attributes.at(id_col) == mif.features.at(i-1).attributes.at(id_col))
           mif.dropFeature.at(i) = true;
     }
@@ -816,7 +816,7 @@ namespace oia_risk_model{
   }
 
   // Helper function to "rejoin" features in a feature that has previously been divided...
-  void rejoin(MIF mif, const std::string outputFile, const int id_col, const std::string method="SUM") {
+  void rejoin(MIF mif, const std::string outputFile, const std::size_t id_col, const std::string method="SUM") {
     // Method matches features on id_col and supports the following merging methods,
     // which operate on Float attributes only:
     // "SUM", "MIN", "MAX" and "MEAN"
@@ -842,12 +842,12 @@ namespace oia_risk_model{
       inFile.close();
 
       // Loop over all the features, looking for neighbours that have been split...
-      for(int i=1; i<mif.features.size(); i++)
+      for(std::size_t i=1; i<mif.features.size(); i++)
         if(id.at(i) == id.at(i-1))
           mif.dropFeature.at(i) = true;
     }else{
-      // We have the data in memory, so can find the features that have been divided simply... 
-      for(int i=1; i<mif.features.size(); i++)
+      // We have the data in memory, so can find the features that have been divided simply...
+      for(std::size_t i=1; i<mif.features.size(); i++)
         if(mif.features.at(i).attributes.at(id_col) == mif.features.at(i-1).attributes.at(id_col))
           mif.dropFeature.at(i) = true;
     }
@@ -879,7 +879,7 @@ namespace oia_risk_model{
     int tree_cover_index = -9;
 
     // First go around, lets find the indices of interest...
-    for(int i=0; i<mif.columns.size(); i++){
+    for(std::size_t i=0; i<mif.columns.size(); i++){
       // We also need to keep track of the highway tag on the roads - this is not part of the above calcs....
       if(mif.columns.at(i).find("highway") != std::string::npos){
         highway_index = i;
@@ -913,7 +913,7 @@ namespace oia_risk_model{
     int numRPCols = 0;
 
     //...second go around, lets do the actual maths...
-    for(int i=0; i<mif.columns.size(); i++){
+    for(std::size_t i=0; i<mif.columns.size(); i++){
       if(mif.columns.at(i).find("RP") != std::string::npos){
         isRP.push_back(true);
         numRPCols++;
@@ -1034,7 +1034,7 @@ namespace oia_risk_model{
 
         // Check to see if the asset is at ANY risk at all...
         bool noRisk = true;
-        for(int i=0; i<isRP.size(); i++){
+        for(std::size_t i=0; i<isRP.size(); i++){
           if(isRP.at(i)){
             if(std::stod(mid_words.at(i)) > 0){
               noRisk = false;
@@ -1054,7 +1054,7 @@ namespace oia_risk_model{
 
         if(!(noRisk && removeNoRiskAssets)){
           // Loop over the words in the file...
-          for(int i=0; i<mid_words.size(); i++){
+          for(std::size_t i=0; i<mid_words.size(); i++){
             // Just pass the incoming data into the new file...
             new_mid << mid_words.at(i);
 
@@ -1081,10 +1081,10 @@ namespace oia_risk_model{
           }
 
           // We now need to loop over each scenario and calculate the Annual probability of failure...
-          for(int uIndex=0; uIndex<uniqueScenarios.size(); uIndex++){
+          for(std::size_t uIndex=0; uIndex<uniqueScenarios.size(); uIndex++){
             std::vector<int>     returnPeriods;
             std::vector<double>  pFail;
-            for(int i=0; i<mid_words.size(); i++){
+            for(std::size_t i=0; i<mid_words.size(); i++){
               if(scenarios.at(i).first == uniqueScenarios.at(uIndex)){
                 returnPeriods.push_back(scenarios.at(i).second);
                 pFail.push_back(f.probability(CG, std::stod(mid_words.at(i))));
@@ -1135,7 +1135,7 @@ namespace oia_risk_model{
     new_mif.open(outFile + ".mif");
 
     // The header remains the same...
-    for(int i=0; i<mif.header.size(); i++){
+    for(std::size_t i=0; i<mif.header.size(); i++){
       std::getline(mif_file, line);
       new_mif << line << "\n";
     }
@@ -1147,7 +1147,7 @@ namespace oia_risk_model{
     new_mif << "Columns " << mif.columns.size() + 4*numRPCols + 4*uniqueScenarios.size() << "\n";
 
     // Loop over each column in the file...
-    for(int i=0; i<mif.columns.size(); i++){
+    for(std::size_t i=0; i<mif.columns.size(); i++){
       std::getline(mif_file, line);
       new_mif << line << "\n";
       if(isRP.at(i)){
@@ -1161,7 +1161,7 @@ namespace oia_risk_model{
     }
 
     // Then add the annula probabilities...
-    for(int i=0; i<uniqueScenarios.size(); i++){
+    for(std::size_t i=0; i<uniqueScenarios.size(); i++){
       new_mif << "  annualProbability_" + uniqueScenarios.at(i) + " Float\n";
       new_mif << "  EAL_" + uniqueScenarios.at(i) + " Float\n";
       new_mif << "  minEAD_" + uniqueScenarios.at(i) + " Float\n";

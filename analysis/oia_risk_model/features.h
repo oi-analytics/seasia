@@ -37,7 +37,7 @@ namespace oia_risk_model{
       int numCrossings=0;
 
       // Loop over each line in the line-loop (by definition, this must be closed - see constructor)...
-      for(int i=0; i<geometry.size()-1; i++){
+      for(std::size_t i=0; i<geometry.size()-1; i++){
         geometry::Line2<double> m(geometry.at(i), geometry.at(i+1));
         if(l.linesCross(m))
           numCrossings++;
