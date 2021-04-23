@@ -18,7 +18,7 @@ namespace oia_risk_model{
       }
   private:
     virtual const char* what(void) {
-      return e.c_str(); 
+      return e.c_str();
     }
   };
 

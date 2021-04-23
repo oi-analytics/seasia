@@ -10,7 +10,7 @@
 namespace oia_risk_model{
   // Structure defining an ESRI Ascii raster...
   struct Ascii{
-    int                 ncols;      // number of columns in the Ascii Raster 
+    int                 ncols;      // number of columns in the Ascii Raster
     int                 nrows;      // number of rows in the Ascii Raster
     double              xll;        // xl corner of the Ascii Raster
     double              yll;        // yll corner of the Ascii Raster
@@ -18,7 +18,7 @@ namespace oia_risk_model{
     double              nodata;     // value taken as "no data"
     std::vector<double> data;       // 1D vector of doubles storing the data in the Ascii Raster
     int                 numCells;   // For convenience, store the number of cells (calculated)
-  
+
     // Read and interpret a line in the ascii header...
     void readHeaderLine(const std::string line) {
       std::vector<std::string> key_value = utils::readLine(line, ' ');
@@ -99,7 +99,7 @@ namespace oia_risk_model{
       geometry::Vec2<double> pN(dN*run/rise, dN);
       geometry::Vec2<double> pE(dE, dE*rise/run);
 
-      // Create a vector of grid / graticule crossings to return to the caller...    
+      // Create a vector of grid / graticule crossings to return to the caller...
       std::vector<geometry::Vec2<double>> crossings;
 
       // Append the start point of the line to the vector of crossings...
@@ -168,7 +168,7 @@ namespace oia_risk_model{
     }
   };
 
-  // Helper function to read a steering file containing a list of raster files we want to process... 
+  // Helper function to read a steering file containing a list of raster files we want to process...
   std::vector<std::pair<std::string,std::string>> readRasterSteeringFile(const std::string fileName){
     // Open the nominated file...
     std::ifstream steeringFile;

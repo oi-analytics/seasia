@@ -83,7 +83,7 @@ namespace oia_risk_model{
       }
 
       // Return the fully-populated cost function to the caller...
-      return cf; 
+      return cf;
     }
   } // fragility
 } // oia_risk_model

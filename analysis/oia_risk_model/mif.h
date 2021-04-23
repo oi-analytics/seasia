@@ -23,7 +23,7 @@ namespace oia_risk_model{
     std::vector<bool>        dropFeature;       // Vector of bools indicating feature can safely be discarded before write-out
     std::vector<std::string> columns;           // String representation of the attribute names
     std::vector<bool>        dropColumn;        // Vector of bools indicating whether the attribute (column) should be dropped before writing
-    // Helper function to read the header of the MIF file... 
+    // Helper function to read the header of the MIF file...
     bool readHeader(std::ifstream* infile){
         // Put some space aside to read the file...
         std::string line = "";
@@ -70,9 +70,9 @@ namespace oia_risk_model{
 
       // And a flag to indicate whether the extension is upper-case or not...
       bool isUpperCase = false;
-      
+
       // If the file already has an extension, strip it...
-      if(f_n.find(".mif") != std::string::npos || 
+      if(f_n.find(".mif") != std::string::npos ||
          f_n.find(".MIF") != std::string::npos){
         // Trim the file to remove the extension...
         f_n = f_n.substr(0,f_n.length()-4);
@@ -87,7 +87,7 @@ namespace oia_risk_model{
         mif_file.open(f_n + ".mif");
       else
         mif_file.open(f_n + ".MIF");
-      
+
       // Open the .mid file...
       std::ifstream mid_file;
       if(!isUpperCase)
@@ -127,7 +127,7 @@ namespace oia_risk_model{
             // ogr2ogr Pline element...
             if(mif_words.at(0) == "Region"){
               // We are dealing with regions...
-              region = true; 
+              region = true;
               numFeatures = std::stoi(mif_words.at(1));
 
               // The number of points for the first feature comes next...
@@ -174,7 +174,7 @@ namespace oia_risk_model{
           // Loop over each of the features / regions...
           for(int j=0; j<numFeatures; j++){
             // Create a new geometry vector...
-            std::vector<geometry::Vec2<double>> geom; 
+            std::vector<geometry::Vec2<double>> geom;
 
             // For the second and later features / regions we need to read the number of points...
             if(j > 0 && region){
@@ -189,7 +189,7 @@ namespace oia_risk_model{
 
               // Split the string into words...
               std::vector<std::string> words = utils::readLine(point_line, ' ');
-              
+
               // Parse the point into its Lat, Lon pair and save in the feature geometery...
               if(words.size() == 2){
                   geometry::Vec2<double> pt(std::stod(words.at(0)),std::stod(words.at(1)));
@@ -212,7 +212,7 @@ namespace oia_risk_model{
 
           // The features in the mif have a pen line that we don't need to save in the internal repr...
           std::getline(mif_file, pen_line);
-          
+
           // The features in the region files have a brush as well as a pen...
           if(region)
             std::getline(mif_file, pen_line);
@@ -317,7 +317,7 @@ namespace oia_risk_model{
         // Give the clean feature the same attributes as the feature we are testing...
         clean.attributes = f.attributes;
 
-        // And a flag to indicate that a feature has been divided...  
+        // And a flag to indicate that a feature has been divided...
         bool divided = false;
         // Loop over each point in the original feature geometry...
         for(std::size_t i=0; i<f.geometry.size()-1; i++){
@@ -458,7 +458,7 @@ namespace oia_risk_model{
       std::cout << "Number of features AFTER cleaning = " << features.size() << "\n";
 #endif // CHATTY
     }
-    
+
     // Helper function to write the MID file to disk...
     void writeMID(const std::string fileName, const std::string merge="NONE") const {
       // Open the output file...
@@ -470,9 +470,9 @@ namespace oia_risk_model{
       if(justInTime){
         std::ifstream           inFile;
         inFile.open(_fileName + ".mid");
-        
+
         std::string line;
-        
+
         while(!inFile.eof()){
           std::getline(inFile, line);
           if(line.size() > 0){
@@ -496,7 +496,7 @@ namespace oia_risk_model{
 
         // Copy the first features attributes...
         std::vector<std::string> merged_attributes;
-        
+
         // Get the attributes for the feature...
         if(justInTime){
           merged_attributes = utils::readLine(midLines.at(iF));
@@ -532,7 +532,7 @@ namespace oia_risk_model{
                 if(!prob){
                   merged_attributes.at(iA) = std::to_string(existing + incoming);
                 }else{
-                  double p = existing + ((1 - existing) * incoming); 
+                  double p = existing + ((1 - existing) * incoming);
                   merged_attributes.at(iA) = std::to_string(p);
                 }
               }else if(merge == "MIN"){
@@ -655,7 +655,7 @@ namespace oia_risk_model{
       if(!justMif)
         writeMID(fileName);
     }
-    
+
     // Write a MIf file to disk from buffered files, rather than feature attributes...
     void writefromBuffer(const std::string fileName, const std::vector<std::string> buffers){
       // Open the mid file for output...
@@ -708,12 +708,12 @@ namespace oia_risk_model{
 
       // ...and delete!
       for(auto b : buffers)
-        int rest = remove(b.c_str());
-      
+        remove(b.c_str());
+
       // Finally, we need to add the buffers to the MIF file itself...
       for(auto buffer : buffers)
         addAttribute(buffer, "Float");
-      
+
       // And write it out (without the MID)...
       write(fileName, true);
     }
@@ -773,10 +773,10 @@ namespace oia_risk_model{
     // Make sure both parts of the file to merge actually exist...
     if(!utils::exists(mifFile + ".mif") || !utils::exists(mifFile + ".mid"))
       Exception("File does not exist: " + mifFile + ".mif");
-    
+
     // Read the file...
     MIF mif(mifFile);
-    
+
     // Are we doing this JIT, or from memory?
     if(mif.justInTime){
       // Open and read the MIF to find the ids of the features...
@@ -820,7 +820,7 @@ namespace oia_risk_model{
     // Method matches features on id_col and supports the following merging methods,
     // which operate on Float attributes only:
     // "SUM", "MIN", "MAX" and "MEAN"
-    
+
     // Are we doing this JIT, or from memory?
     if(mif.justInTime){
       // Open and read the MIF to find the ids of the features...
@@ -832,7 +832,7 @@ namespace oia_risk_model{
       while(!inFile.eof()){
         std::string line;
         std::getline(inFile, line);
-    
+
         std::vector<std::string> words = utils::readLine(line, ',');
 
         if(words.size() > id_col)
@@ -861,10 +861,10 @@ namespace oia_risk_model{
   }
 
   // Helper function to addfragility to a MIF file (by default, throwing out any assets with 0 risk)...
-  void addRoadFragility(MIF mif, 
-                        const fragility::FragilityCurve f, 
-                        const fragility::CostFunction cf, 
-                        const std::string outFile, 
+  void addRoadFragility(MIF mif,
+                        const fragility::FragilityCurve f,
+                        const fragility::CostFunction cf,
+                        const std::string outFile,
                         const bool removeNoRiskAssets=true){
     // First, we want to know which of our input columns are numeric, and need pFail calculated...
     std::vector<bool> isRP;
@@ -903,7 +903,7 @@ namespace oia_risk_model{
 
     // Is the incoming file meant to provide wind risk?
     bool windRisk = mean_speed_index > 0 && tree_cover_index > 0;
-    
+
 #ifdef CHATTY
     if(windRisk)
       std::cout << "Handling wind risk...\n";
@@ -923,7 +923,7 @@ namespace oia_risk_model{
 
         // Pull out the Scenario and Year (the first and second words)...
         std::string scenario;
-        
+
         if(windRisk){
           scenario = words.at(0);
         }else{
@@ -1010,7 +1010,7 @@ namespace oia_risk_model{
         if(windRisk){
           CG = f.windCG(std::stod(mid_words.at(mean_speed_index)));
         }else{
-          if( f.serviceability ) 
+          if( f.serviceability )
             CG = f.roadServiceabilityCG(mid_words.at(highway_index));
           else
             CG = f.roadCG(mid_words.at(highway_index));
@@ -1100,7 +1100,7 @@ namespace oia_risk_model{
             // Add the annualProb to disk...
             new_mid << area;
 
-            // And the event length damage and min / max costs of damage... 
+            // And the event length damage and min / max costs of damage...
             new_mid << "," << area * length;
             new_mid << "," << area * length * minCost * 1000000;
             new_mid << "," << area * length * maxCost * 1000000;
@@ -1177,7 +1177,7 @@ namespace oia_risk_model{
     while(!mif_file.eof()){
       // Read the next line...
       std::getline(mif_file, line);
-      
+
       if(line.size() > 0){
         // Check to see if we are throwing it out and it is a qualifying asset...
         if(!removeFeature.at(featureIndex) && removeNoRiskAssets)

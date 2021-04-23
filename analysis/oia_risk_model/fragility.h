@@ -86,7 +86,7 @@ namespace oia_risk_model{
             roadType.find("primary") != std::string::npos &&
             roadType.find("secondary") != std::string::npos &&
             roadType.find("trunk") != std::string::npos ){
-          return 1; 
+          return 1;
         }
 
         // All other road types get the "unpaved" CG...
@@ -95,12 +95,12 @@ namespace oia_risk_model{
 
       // Helper function to return the serviceability CG of the road service...
       int roadServiceabilityCG(const std::string roadType) const {
-        if( roadType.find("motorway") != std::string::npos || 
+        if( roadType.find("motorway") != std::string::npos ||
             roadType.find("trunk") != std::string::npos )
           return 1;
         if( roadType.find("primary") != std::string::npos)
           return 2;
-        if( roadType.find("secondary") != std::string::npos || 
+        if( roadType.find("secondary") != std::string::npos ||
             roadType.find("tertiary") != std::string::npos)
           return 3;
         // All other assets get a CG of 4 (which is the first in the file)...
