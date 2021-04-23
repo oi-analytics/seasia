@@ -15,8 +15,8 @@
 namespace oia_risk_model{
   // MapInfo data type, contains internal representatin / methods for polylines and regions
   struct MIF{
-    bool                     justInTime=false;  // Should the heavy-data (.mid) be read at once, or defered to later?
     std::string              _fileName;         // When reading the file "Just In time", we need to preserve the filename
+    bool                     justInTime=false;  // Should the heavy-data (.mid) be read at once, or defered to later?
     bool                     region=false;      // Does the MIF file describe regions?
     std::vector<std::string> header;            // Verbatim representation of the header of the MIF file
     std::vector<Feature>     features;          // Vector of features in the file
