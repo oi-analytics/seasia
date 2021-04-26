@@ -19,7 +19,7 @@ namespace oia_risk_model{
       // Calculate the emissions as per the TRI paper on emissions with speed...
       double emissions(const double speed_km) const {
         double g_km = coeffs.at(0);
-        for(int i=1; i<coeffs.size(); i++){
+        for(std::size_t i=1; i<coeffs.size(); i++){
           g_km += coeffs.at(i)*std::pow(speed_km,i);
         }
         return factor * g_km / speed_km;
@@ -64,9 +64,9 @@ namespace oia_risk_model{
         readVehiclesFile(emissionsFile);
 
         // Set the share of vehicles by age according to national income...
-        double pOld = income == "high" ? 0.30 : income == "upper-middle" ? 0.50 : income == "lower-middle" ? 0.60 : 0.70; 
-        double pMed = income == "high" ? 0.50 : income == "upper-middle" ? 0.30 : income == "lower-middle" ? 0.30 : 0.20; 
-        double pNew = income == "high" ? 0.20 : income == "upper-middle" ? 0.20 : income == "lower-middle" ? 0.10 : 0.10; 
+        double pOld = income == "high" ? 0.30 : income == "upper-middle" ? 0.50 : income == "lower-middle" ? 0.60 : 0.70;
+        double pMed = income == "high" ? 0.50 : income == "upper-middle" ? 0.30 : income == "lower-middle" ? 0.30 : 0.20;
+        double pNew = income == "high" ? 0.20 : income == "upper-middle" ? 0.20 : income == "lower-middle" ? 0.10 : 0.10;
 
         // Global distribution of car sizes as of 2021...
         double pSmall = 0.36;
@@ -115,7 +115,7 @@ namespace oia_risk_model{
         // Make sure the header is the correct format...
         if(headerWords.size() != 9){
           Exception("The header of the emissions file seems to have the wrong number data.");
-          return; 
+          return;
         }
 
         // Read the vehicles file line by line...
@@ -126,7 +126,7 @@ namespace oia_risk_model{
           // If the line is the correct length, parse it out...
           if(words.size() == 9){
             std::vector<double> c;
-            for(int i=2; i<words.size(); i++){
+            for(std::size_t i=2; i<words.size(); i++){
               c.push_back(std::stod(words.at(i)));
             }
             // Insert the vehicle object into the std::map...
@@ -137,7 +137,7 @@ namespace oia_risk_model{
       // Helper function to calculate fleet emissions for a given speed...
       double emissions(const double speed_km, const double dist_km=1.0) const {
         double total_emissions = 0;
-        // Accumulate the total emissions for a fleet of vehicles at a given speed... 
+        // Accumulate the total emissions for a fleet of vehicles at a given speed...
         for(auto p : distribution){
           total_emissions += vehicles[p.first]->emissions(speed_km) * p.second * dist_km;
         }
@@ -146,7 +146,7 @@ namespace oia_risk_model{
       // Helper function to calculate passenger-fleet emissions for a given speed...
       double passengerEmissions(const double speed_km, const double dist_km=1.0) const {
         double passenger_emissions = 0;
-        // Accumulate the total emissions for a fleet of vehicles at a given speed... 
+        // Accumulate the total emissions for a fleet of vehicles at a given speed...
         for(auto p : distribution){
           if(p.first.compare("car") != std::string::npos){
             passenger_emissions += vehicles[p.first]->emissions(speed_km) * p.second * dist_km;
@@ -157,7 +157,7 @@ namespace oia_risk_model{
       // Helper function to calculate commercial-fleet emissions for a given speed...
       double commercialEmissions(const double speed_km, const double dist_km=1.0) const {
         double commercial_emissions = 0;
-        // Accumulate the total emissions for a fleet of vehicles at a given speed... 
+        // Accumulate the total emissions for a fleet of vehicles at a given speed...
         for(auto p : distribution){
           if(p.first.compare("car") == std::string::npos){
             commercial_emissions += vehicles[p.first]->emissions(speed_km) * p.second * dist_km;

@@ -48,18 +48,18 @@ namespace oia_risk_model{
         if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
           return true; // NOTE: If needed, lines cross as this point Vec2<double> intersection(p0_x + (t * s1_x), p0_y + (t * s1_y));
 
-        return false; 
+        return false;
       }
       // Method to calculate whether a Line2<T> crosses a line comprising a pair of Vec2<T> points...
       bool linesCross(const Vec2<T> start, Vec2<T> end){
-        return linesCross(Line2<T>(start, end)); 
+        return linesCross(Line2<T>(start, end));
       }
     };
 
     // Haversine formula - calculate the distance between two points on the surface of the earth, using great-circles (NOTE: Only use with projected data)...
     inline double haversine(Line2<double> line){
-      double dLat_2 = ((line.end.y - line.start.y) * utils::toRad) / 2.0; 
-      double dLon_2 = ((line.end.x - line.start.x) * utils::toRad) / 2.0; 
+      double dLat_2 = ((line.end.y - line.start.y) * utils::toRad) / 2.0;
+      double dLon_2 = ((line.end.x - line.start.x) * utils::toRad) / 2.0;
 
       double a = sin(dLat_2)*sin(dLat_2) + cos(line.start.y * utils::toRad)*cos(line.end.y * utils::toRad) * sin(dLon_2) * sin(dLon_2);
       double c = 2.0 * atan2(sqrt(a), sqrt(1-a));

@@ -24,7 +24,7 @@ namespace oia_risk_model{
     geometry::Vec2<double> pOut;  // A point known to be outside of the polygon
     // Broad-phase (thence quick) test of whether a point in the bounding box of the Poly2...
     bool AABB(const geometry::Vec2<double> p) const {
-      bool xOverlap = p.x >= ll.x && p.x <= ur.x; 
+      bool xOverlap = p.x >= ll.x && p.x <= ur.x;
       bool yOverlap = p.y >= ll.y && p.y <= ur.y;
       return xOverlap && yOverlap;
     }
@@ -37,13 +37,13 @@ namespace oia_risk_model{
       int numCrossings=0;
 
       // Loop over each line in the line-loop (by definition, this must be closed - see constructor)...
-      for(int i=0; i<geometry.size()-1; i++){
+      for(std::size_t i=0; i<geometry.size()-1; i++){
         geometry::Line2<double> m(geometry.at(i), geometry.at(i+1));
         if(l.linesCross(m))
           numCrossings++;
       }
 
-      // An even number of crossings means the incoming point MUST be on the same side of the feature's perimeter as the 
+      // An even number of crossings means the incoming point MUST be on the same side of the feature's perimeter as the
       // point KNOWN to be outside the geometry, while an odd number means it must be on the opposite side (i.e. inside):
       return !(numCrossings%2 == 0);
     }

@@ -10,9 +10,9 @@
 namespace oia = oia_risk_model;
 
 
-/* 
+/*
  * "Hello world" basic usage of oia_risk_model, which is a header-only library so only needs to be included (no linking).
- * Suggested compilation script: g++ hello_oia.cpp -std=c++17 -O3 -o hello_oia 
+ * Suggested compilation script: g++ hello_oia.cpp -std=c++17 -O3 -o hello_oia
  */
 int main(int argc, char** argv){
   ////////////////////////////////////////////////////////////
