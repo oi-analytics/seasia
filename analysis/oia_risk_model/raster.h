@@ -46,6 +46,11 @@ namespace oia_risk_model{
     double data_at_point(const geometry::Vec2<double> p){
       // Get the cell index of the point...
       int cI = cellIndex(p);
+
+      // Guard on cell being out-of-range...
+      if(cI < 0 || cI >= numCells)
+        return 0;
+
       // Return the data at that cell index...
       return data.at(cI);
     }
