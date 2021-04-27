@@ -17,6 +17,21 @@ namespace oia_risk_model{
     geometry::Vec2<double> mid_point(void) const{
       return geometry::Vec2<double>((ll.x + ur.x)/2,(ll.y + ur.y)/2);
     }
+    // Helper function to add a valid BB to a line feature...
+    void addBB(void){
+      // Give the ll and ur points a starting point...
+      ll = geometry.at(0);
+      ur = geometry.at(0);
+
+      // Add each point to the internal representation...
+      for(auto p : geometry){
+        // Identify the min and max x, y values of the geometry...
+        ll.x = std::min(p.x, ll.x);
+        ur.x = std::max(p.x, ur.x);
+        ll.y = std::min(p.y, ll.y);
+        ur.y = std::max(p.y, ur.y);
+      }
+    }
   };
 
   // Structure to represent a polygon in 2D space (inherits from Feature)

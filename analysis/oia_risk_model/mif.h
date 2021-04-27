@@ -40,7 +40,6 @@ namespace oia_risk_model{
               std::string colLine;
               for(int i=0; i<numCols; i++){
                 std::getline(*infile, colLine);
-                std::cout << colLine << "\n";
                 columns.push_back(colLine);
                 dropColumn.push_back(false);
               }
@@ -384,6 +383,10 @@ namespace oia_risk_model{
       // ...and add the new features / indicators in their place.
       features = cleanedFeatures;
       dropFeature = dropCleanFeature;
+
+      // Finally, add the BB to the line features...
+      for(auto& f : features)
+        f.addBB();
 
 #ifdef CHATTY
       std::cout << "Number of features AFTER cleaning = " << features.size() << "\n";
